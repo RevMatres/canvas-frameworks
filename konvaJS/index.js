@@ -25,17 +25,7 @@ let rect = new Konva.Rect({
 
 rect.on("click", function(){
   addparticlL(Math.random()*100)
-  anim.start()
 })
-
-let anim = new Konva.Animation(function(frame){
-  let time = frame.time,
-      timeDiff = frame.timeDiff,
-      frameRate = frame.frameRate
-
-  let col = Math.round(timeDiff)
-  rect.x += col
-}, ui)
 
 // add shape to layer
 ui.add(rect)
@@ -63,9 +53,9 @@ function addparticlL(n){
 
     particles.push(
       new Konva.Circle({
-        // x: x,
-        // y: y,
-        x: Math.random()*window.innerHeight, y: Math.random()*window.innerWidth,
+        x: x,
+        y: y,
+        // x: Math.random()*window.innerHeight, y: Math.random()*window.innerWidth,
         radius: 2,
         fill: "rgb("+r+","+g+","+b+")",
         vx: vx,
@@ -79,7 +69,7 @@ function addparticlL(n){
   }
 
   stageP()
-  // animP()
+  animP()
 }
 
 function stageP(){
@@ -93,7 +83,10 @@ function animP(){
         fRate = frame.frameRate
 
     particles.forEach(val => {
-      val.attrs.y += val.attrs.vy*deltaT
+      let x = val.getX(), y = val.getY()
+      let vx = val.attrs.vx, vy = val.attrs.vy
+      val.setY(y + vy/deltaT)
+      val.setX(x + vx/deltaT)
     })
   }, particlL)
   partAnim.start()
